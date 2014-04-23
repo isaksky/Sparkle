@@ -27,6 +27,7 @@ NSString *const SUPublicDSAKeyKey = @"SUPublicDSAKey";
 NSString *const SUPublicDSAKeyFileKey = @"SUPublicDSAKeyFile";
 NSString *const SUAutomaticallyUpdateKey = @"SUAutomaticallyUpdate";
 NSString *const SUAllowsAutomaticUpdatesKey = @"SUAllowsAutomaticUpdates";
+NSString *const SUForceUpdatesKey = @"SUForceUpdates";
 NSString *const SUEnableSystemProfilingKey = @"SUEnableSystemProfiling";
 NSString *const SUEnableAutomaticChecksKey = @"SUEnableAutomaticChecks";
 NSString *const SUEnableAutomaticChecksKeyOld = @"SUCheckAtStartup";

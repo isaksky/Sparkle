@@ -15,6 +15,7 @@
 #import "SUProbingUpdateDriver.h"
 #import "SUUserInitiatedUpdateDriver.h"
 #import "SUScheduledUpdateDriver.h"
+#import "SUForcedUpdatesDriver.h"
 #import "SUConstants.h"
 #import "SULog.h"
 #import "SUCodeSigningVerifier.h"
@@ -169,6 +170,8 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
             shouldPrompt = YES;
     }
     
+    shouldPrompt = shouldPrompt && ![host boolForInfoDictionaryKey:SUForceUpdatesKey];
+    
     if (shouldPrompt)
     {
 		NSArray *profileInfo = [host systemProfile];
@@ -207,13 +210,13 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
 }
 
 - (void)scheduleNextUpdateCheck
-{	
-	if (checkTimer)
+{
+ 	if (checkTimer)
 	{
 		[checkTimer invalidate];
 		self.checkTimer = nil; // UK 2009-03-16 Timer is non-repeating, may have invalidated itself, so we had to retain it.
 	}
-	if (![self automaticallyChecksForUpdates]) return;
+	if (![self doesScheduledUpdateChecks]) return;
 	
 	// How long has it been since last we checked for an update?
 	NSDate *lastCheckDate = [self lastUpdateCheckDate];
@@ -228,6 +231,11 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
 		delayUntilCheck = (updateCheckInterval - intervalSinceCheck); // It hasn't been long enough.
 	else
 		delayUntilCheck = 0; // We're overdue! Run one now.
+    
+    if ([host boolForInfoDictionaryKey:SUForceUpdatesKey]) {
+        delayUntilCheck = 0;
+    }
+    
 	self.checkTimer = [NSTimer scheduledTimerWithTimeInterval:delayUntilCheck target:self selector:@selector(checkForUpdatesInBackground) userInfo:nil repeats:NO];		// UK 2009-03-16 Timer is non-repeating, may have invalidated itself, so we had to retain it.
 }
 
@@ -291,7 +299,14 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
 	// Background update checks should only happen if we have a network connection.
 	//	Wouldn't want to annoy users on dial-up by establishing a connection every
 	//	hour or so:
-	SUUpdateDriver *	theUpdateDriver = [[[([self automaticallyDownloadsUpdates] ? [SUAutomaticUpdateDriver class] : [SUScheduledUpdateDriver class]) alloc] initWithUpdater:self] autorelease];
+	SUUpdateDriver *	theUpdateDriver;
+    if ([host boolForInfoDictionaryKey:SUForceUpdatesKey]) {
+        theUpdateDriver = [[[SUForcedUpdatesDriver alloc] initWithUpdater:self] autorelease];
+    } else if ([self automaticallyDownloadsUpdates]) {
+        theUpdateDriver = [[[SUAutomaticUpdateDriver alloc] initWithUpdater:self] autorelease];
+    } else {
+        theUpdateDriver = [[[SUScheduledUpdateDriver alloc] initWithUpdater:self] autorelease];
+    }
 	
 	[NSThread detachNewThreadSelector: @selector(checkForUpdatesInBgReachabilityCheckWithDriver:) toTarget: self withObject: theUpdateDriver];
 }
@@ -307,7 +322,11 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
 	if (driver && [driver isInterruptible])
 		[driver abortUpdate];
 
-	[self checkForUpdatesWithDriver:[[[SUUserInitiatedUpdateDriver alloc] initWithUpdater:self] autorelease]];
+    Class c = [host boolForInfoDictionaryKey:SUForceUpdatesKey] ? [SUForcedUpdatesDriver class] : [SUUserInitiatedUpdateDriver class];
+    
+    SUUpdateDriver *ddriver = [[[c alloc] initWithUpdater:self] autorelease];
+    
+	[self checkForUpdatesWithDriver:ddriver];
 }
 
 - (void)checkForUpdateInformation
@@ -403,11 +422,12 @@ static NSString * const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefault
     [self performSelector:@selector(resetUpdateCycle) withObject:nil afterDelay:1];
 }
 
-- (BOOL)automaticallyChecksForUpdates
+- (BOOL)doesScheduledUpdateChecks
 {
 	// Don't automatically update when the check interval is 0, to be compatible with 1.1 settings.
     if ([self updateCheckInterval] == 0)
-        return NO;	
+        return NO;
+    
 	return [host boolForKey:SUEnableAutomaticChecksKey];
 }
 

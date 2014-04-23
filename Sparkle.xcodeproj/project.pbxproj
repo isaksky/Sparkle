@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3772FEA913DE0B6B00F79537 /* SUVersionDisplayProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 3772FEA813DE0B6B00F79537 /* SUVersionDisplayProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4FA161CE18FF489C00C8640D /* SUForcedUpdatesDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = 4FA161CC18FF489C00C8640D /* SUForcedUpdatesDriver.h */; };
+		4FA161CF18FF489C00C8640D /* SUForcedUpdatesDriver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FA161CD18FF489C00C8640D /* SUForcedUpdatesDriver.m */; };
 		525A2790133D6AE900FD8D70 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 525A278F133D6AE900FD8D70 /* Cocoa.framework */; };
 		525A27A0133D6B9700FD8D70 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 525A278F133D6AE900FD8D70 /* Cocoa.framework */; };
 		550347011370023A00AE7681 /* Sparkle.icns in Resources */ = {isa = PBXBuildFile; fileRef = 550347001370023A00AE7681 /* Sparkle.icns */; };
@@ -197,6 +199,8 @@
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		3772FEA813DE0B6B00F79537 /* SUVersionDisplayProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUVersionDisplayProtocol.h; sourceTree = "<group>"; };
+		4FA161CC18FF489C00C8640D /* SUForcedUpdatesDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUForcedUpdatesDriver.h; sourceTree = "<group>"; };
+		4FA161CD18FF489C00C8640D /* SUForcedUpdatesDriver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUForcedUpdatesDriver.m; sourceTree = "<group>"; };
 		525A278F133D6AE900FD8D70 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		550347001370023A00AE7681 /* Sparkle.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Sparkle.icns; sourceTree = "<group>"; };
 		55C14BB7136EEF1500649790 /* Autoupdate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Autoupdate.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -485,7 +489,7 @@
 			isa = PBXGroup;
 			children = (
 				5D06E8D00FD68C7C005AE3F6 /* BinaryDelta */,
-				55C14BB7136EEF1500649790 /* finish_installation.app */,
+				55C14BB7136EEF1500649790 /* Autoupdate.app */,
 				61B5F90209C4CEE200B25A18 /* Sparkle Test App.app */,
 				612279D90DB5470200AB99EA /* Sparkle Unit Tests.octest */,
 				8DC2EF5B0486A6940098B216 /* Sparkle.framework */,
@@ -710,6 +714,8 @@
 				610134720DD250470049ACDF /* SUUpdateDriver.m */,
 				61A354530DF113C70076ECB1 /* SUUserInitiatedUpdateDriver.h */,
 				61A354540DF113C70076ECB1 /* SUUserInitiatedUpdateDriver.m */,
+				4FA161CC18FF489C00C8640D /* SUForcedUpdatesDriver.h */,
+				4FA161CD18FF489C00C8640D /* SUForcedUpdatesDriver.m */,
 			);
 			name = Drivers;
 			sourceTree = "<group>";
@@ -776,6 +782,7 @@
 				61EF67590E25C5B400F754E0 /* SUHost.h in Headers */,
 				618FA5010DAE88B40026945C /* SUInstaller.h in Headers */,
 				55C14F06136EF6DB00649790 /* SULog.h in Headers */,
+				4FA161CE18FF489C00C8640D /* SUForcedUpdatesDriver.h in Headers */,
 				618FA5220DAE8E8A0026945C /* SUPackageInstaller.h in Headers */,
 				93FB277A156BD80D001937C7 /* SUPasswordPrompt.h in Headers */,
 				6102FE460E077FCE00F85D09 /* SUPipedUnarchiver.h in Headers */,
@@ -818,6 +825,7 @@
 			dependencies = (
 			);
 			name = finish_installation;
+			productName = finish_installation;
 			productReference = 55C14BB7136EEF1500649790 /* Autoupdate.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -1000,7 +1008,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55C14F3B136EFCB300649790 /* finish_installation.app in Resources */,
+				55C14F3B136EFCB300649790 /* Autoupdate.app in Resources */,
 				61C2680A0E2DB5D000175E6C /* License.txt in Resources */,
 				61AAE8280A321A7F00D8810D /* Sparkle.strings in Resources */,
 				55C14BEE136EF20D00649790 /* SUAutomaticUpdateAlert.xib in Resources */,
@@ -1149,6 +1157,7 @@
 				61B5FBB709C4FAFF00B25A18 /* SUAppcast.m in Sources */,
 				61B5FC6F09C51F4900B25A18 /* SUAppcastItem.m in Sources */,
 				6120721309CC5C4B007FE0F6 /* SUAutomaticUpdateAlert.m in Sources */,
+				4FA161CF18FF489C00C8640D /* SUForcedUpdatesDriver.m in Sources */,
 				61B93B280DD0FDD300DCD2F8 /* SUAutomaticUpdateDriver.m in Sources */,
 				61F83F720DBFE140006FDD30 /* SUBasicUpdateDriver.m in Sources */,
 				5D06E8EC0FD68CE4005AE3F6 /* SUBinaryDeltaApply.m in Sources */,

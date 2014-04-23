@@ -33,7 +33,7 @@
 - (NSBundle *)hostBundle;
 
 - (void)setAutomaticallyChecksForUpdates:(BOOL)automaticallyChecks;
-- (BOOL)automaticallyChecksForUpdates;
+- (BOOL)doesScheduledUpdateChecks;
 
 - (void)setUpdateCheckInterval:(NSTimeInterval)interval;
 - (NSTimeInterval)updateCheckInterval;
